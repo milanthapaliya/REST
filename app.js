@@ -13,12 +13,22 @@ const Student = require('./models/student')
 app.set('view engine', 'ejs')
 app.use(express.urlencoded({extended : false}))
 app.get('/',(req,res) =>{
-    res.render('index', {title : 'Home'})
+    Student.find().then((result) => {
+        // console.log(result)
+        res.render('index', {students : result, title : 'Home'})
+    }).catch((e) => console.log(e));
+    
+})
+app.get('/student/:id', (req,res) => {
+    let id = req.params.id
+    Student.findById(id).then((result) => {
+        res.render('singlestudent', {student : result, title : 'Single Student'})
+    }).catch((e) => console.log(e));
 })
 app.get('/about', (req,res) => {
     res.render('about' , {title : 'About'})
 })
-app.get('/add', (req, res) => {
+app.get('/students/add', (req, res) => {
     res.render('addstudent', {title : 'Add Students'})
 })
 app.post('/students', (req, res) => {

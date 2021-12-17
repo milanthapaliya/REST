@@ -5,7 +5,13 @@
     <% const name = "Milan" %>
     <%- include('./partials/navbar.ejs')%>
     <!-- passing value using ejs -->
-    <h1>Home Page . Welcome <%= name %></h1>  
+    <h1>Home Page . Welcome <%= name %></h1> 
+   
+    <div class="list-group">
+        <% students.forEach((x) => { %>
+            <a href="/student/<%= x._id%>" class="list-group-item list-group-item-action"><%= x.name %></a>
+        <%}) %> 
+      </div>
     <%- include('./partials/footer.ejs')%> 
 </body>
 </html>
