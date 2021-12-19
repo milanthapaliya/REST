@@ -13,16 +13,13 @@ const Student = require('./models/student')
 app.set('view engine', 'ejs')
 app.use(express.urlencoded({extended : false}))
 app.get('/',(req,res) =>{
+    res.redirect('/students')
+})
+//STUDENTS
+app.get('/students', (req,res) => {
     Student.find().then((result) => {
         // console.log(result)
         res.render('index', {students : result, title : 'Home'})
-    }).catch((e) => console.log(e));
-    
-})
-app.get('/student/:id', (req,res) => {
-    let id = req.params.id
-    Student.findById(id).then((result) => {
-        res.render('singlestudent', {student : result, title : 'Single Student'})
     }).catch((e) => console.log(e));
 })
 app.get('/about', (req,res) => {
@@ -39,13 +36,26 @@ app.post('/students', (req, res) => {
     })
     student.save().then(() => {
         console.log("Data Insert Success");
-        res.send("Data successfully inserted")
+        res.redirect('/students')
     }).catch((e) =>{
         console.log(e);
         res.send("Data Insert Failed");
     })
 })
+app.get('/students/:id', (req,res) => {
+    const id = req.params.id
+    Student.findById(id).then((result) => {
+        res.render('singlestudent', {student : result, title : 'Single Student'})
+    }).catch((e) => console.log(e));
+})
+app.delete('/students/:id', (req,res) => {
+    const id = req.params.id
+    Student.findByIdAndDelete(id).then(result => {
+        console.log("inside deletebyid in app.js")
+        res.json({redirect : '/students'})
+    }).catch((err) => console.log(err))
 
+})
 // app.get('students', (req,res) => {
 //     const student = new Student({
 //         name : 'Milan',

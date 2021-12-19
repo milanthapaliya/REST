@@ -9,7 +9,7 @@
    
     <div class="list-group">
         <% students.forEach((x) => { %>
-            <a href="/student/<%= x._id%>" class="list-group-item list-group-item-action"><%= x.name %></a>
+            <a href="/students/<%= x._id%>" class="list-group-item list-group-item-action"><%= x.name %></a>
         <%}) %> 
       </div>
     <%- include('./partials/footer.ejs')%> 

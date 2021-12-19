@@ -5,6 +5,20 @@
     <%- include('./partials/navbar.ejs')%>
     <h1><%= student.name %></h1>
     <h3><%= student.name %> is <%= student.age %> years old</h3>
+    <button class ="delete" data-doc="<%= student._id%>">Delete</button>
     <%- include('./partials/footer.ejs')%> 
+    <script>
+        const trashCan = document.querySelector('button.delete');
+        trashCan.addEventListener('click', (e) => {
+            console.log("click listening")
+            const endpoint = `/students/${trashCan.dataset.doc}`;
+            fetch(endpoint, {method : 'DELETE'})
+            .then((response) => response.json())
+            .then((data) => window.location.href = data.redirect)
+            .catch((err) => {
+                console.log(err);
+            })
+        })
+    </script>
 </body>
 </html>
