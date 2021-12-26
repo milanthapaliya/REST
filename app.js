@@ -11,6 +11,7 @@ const app = express()
 require('./db')
 const Student = require('./models/student')
 app.set('view engine', 'ejs')
+app.use(express.json());
 app.use(express.urlencoded({extended : false}))
 app.get('/',(req,res) =>{
     res.redirect('/students')
@@ -48,6 +49,12 @@ app.get('/students/:id', (req,res) => {
         res.render('singlestudent', {student : result, title : 'Single Student'})
     }).catch((e) => console.log(e));
 })
+app.get('/students/update/:id', (req,res) => {
+    const id = req.params.id
+    Student.findById(id).then((result) => {
+        res.render('updatestudent', {student : result, title : 'Update Student'})
+    }).catch((e) => console.log(e));
+})
 app.delete('/students/:id', (req,res) => {
     const id = req.params.id
     Student.findByIdAndDelete(id).then(result => {
@@ -56,6 +63,22 @@ app.delete('/students/:id', (req,res) => {
     }).catch((err) => console.log(err))
 
 })
+app.put('/students/:id', (req,res) => {
+    const id = req.params.id
+    console.log("reached Here");
+    Student.findByIdAndUpdate(id, {name : req.body.name, age : req.body.age}, (err,docs) => {
+        if(!err){
+            console.log(docs)
+            console.log(req.body.age)
+            // res.redirect(`/students/${id}`)
+        }
+        else{
+            console.log(err)
+        }
+    })
+   
+})
+
 // app.get('students', (req,res) => {
 //     const student = new Student({
 //         name : 'Milan',

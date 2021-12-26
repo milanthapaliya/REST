@@ -6,9 +6,11 @@
     <h1><%= student.name %></h1>
     <h3><%= student.name %> is <%= student.age %> years old</h3>
     <button class ="delete" data-doc="<%= student._id%>">Delete</button>
+    <button class ="update" data-doc="<%= student._id%>">Update</button>
     <%- include('./partials/footer.ejs')%> 
     <script>
         const trashCan = document.querySelector('button.delete');
+        
         trashCan.addEventListener('click', (e) => {
             console.log("click listening")
             const endpoint = `/students/${trashCan.dataset.doc}`;
@@ -18,6 +20,12 @@
             .catch((err) => {
                 console.log(err);
             })
+        })
+        const updat = document.querySelector('button.update');
+        updat.addEventListener('click', (e) => {
+            console.log("click update")
+            const endpoint = `/students/update/${updat.dataset.doc}`;
+            window.location.href = endpoint
         })
     </script>
 </body>
