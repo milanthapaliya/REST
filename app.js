@@ -1,91 +1,21 @@
-// const express = require('express')
-// const app = express()
-// require('./db')
-
-// app.listen(8000,() => {
-//     console.log("Server listening on port 8000")
-// })
-
 const express = require('express')
 const app = express()
 require('./db')
-const Student = require('./models/student')
+const studentRoutes = require('./routes/studentRoutes')
+// const Student = require('./models/student')
 app.set('view engine', 'ejs')
 app.use(express.json());
 app.use(express.urlencoded({extended : false}))
 app.get('/',(req,res) =>{
     res.redirect('/students')
 })
-//STUDENTS
-app.get('/students', (req,res) => {
-    Student.find().then((result) => {
-        // console.log(result)
-        res.render('index', {students : result, title : 'Home'})
-    }).catch((e) => console.log(e));
-})
+
+//ABOUT ROUTE
 app.get('/about', (req,res) => {
     res.render('about' , {title : 'About'})
 })
-app.get('/students/add', (req, res) => {
-    res.render('addstudent', {title : 'Add Students'})
-})
-app.post('/students', (req, res) => {
-    console.log(req.body)
-    const student = new Student({
-        name : req.body.name,
-        age : req.body.age
-    })
-    student.save().then(() => {
-        console.log("Data Insert Success");
-        res.redirect('/students')
-    }).catch((e) =>{
-        console.log(e);
-        res.send("Data Insert Failed");
-    })
-})
-app.get('/students/:id', (req,res) => {
-    const id = req.params.id
-    Student.findById(id).then((result) => {
-        res.render('singlestudent', {student : result, title : 'Single Student'})
-    }).catch((e) => console.log(e));
-})
-app.get('/students/update/:id', (req,res) => {
-    const id = req.params.id
-    Student.findById(id).then((result) => {
-        res.render('updatestudent', {student : result, title : 'Update Student'})
-    }).catch((e) => console.log(e));
-})
-app.delete('/students/:id', (req,res) => {
-    const id = req.params.id
-    Student.findByIdAndDelete(id).then(result => {
-        console.log("inside deletebyid in app.js")
-        res.json({redirect : '/students'})
-    }).catch((err) => console.log(err))
-
-})
-app.put('/students/:id', (req,res) => {
-    const id = req.params.id
-    console.log("reached Here");
-    Student.findByIdAndUpdate(id, {name : req.body.name, age : req.body.age}, (err,docs) => {
-        if(!err){
-            console.log(docs)
-            console.log(req.body.age)
-            // res.redirect(`/students/${id}`)
-        }
-        else{
-            console.log(err)
-        }
-    })
-   
-})
-
-// app.get('students', (req,res) => {
-//     const student = new Student({
-//         name : 'Milan',
-//         age : 23
-//     })
-//     student.save().then(() => console.log("Insert Success")).catch((e) => console.log(e))
-// })
+//STUDENTS ROUTE
+app.use(studentRoutes)
 
 //404 page using middleware
 app.use((req,res) => {
