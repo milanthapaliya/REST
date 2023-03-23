@@ -1,4 +1,4 @@
 const mongoose = require('mongoose')
-const dbUrl = 'mongodb://localhost:27017/database'
+const dbUrl = process.env.DB_URL
 mongoose.connect(dbUrl).then(() => console.log("Connection Success"))
 .catch((e) => console.log("Connection Failed"))
